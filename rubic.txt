@@ -1,0 +1,107 @@
+===========================================================================================
+Data Modeling:
+===========================================================================================
+CRITERIA:Architect relational database models in Python:
+Use of correct data types for fields
+Use of primary and optional foreign key ids
+-------------------------------------------------------------------------------------------
+CRITERIA:Utilize SQLAlchemy to conduct database queries:Architect relational database models
+in Python:
+Does not use raw SQL or only where there are not SQLAlchemy equivalent expressions
+Correctly formats SQLAlchemy to define models
+Creates methods to serialize model data and helper methods to simplify API behavior
+such as insert, update and delete.
+===========================================================================================
+===========================================================================================
+API Architecture and Testing:
+===========================================================================================
+CRITERIA:Follow RESTful principles of API development:
+RESTful principles are followed throughout the project, including appropriate naming of
+endpoints, use of HTTP methods GET, POST, and DELETE
+Routes perform CRUD operations
+-------------------------------------------------------------------------------------------
+CRITERIA:Structure endpoints to respond to four HTTP methods, including error handling:
+Specifies endpoints and behavior for at least:
+Two GET requests
+One POST request
+One PATCH request
+One DELETE request
+Utilize the @app.errorhandler decorator to format error responses as JSON objects
+for at least four different status codes
+-------------------------------------------------------------------------------------------
+CRITERIA:Enable Role Based Authentication and roles-based access control (RBAC) in a
+Flask application:
+Specifies endpoints and behavior for at least:
+Two GET requests
+One POST request
+One PATCH request
+One DELETE request
+Utilize the @app.errorhandler decorator to format error responses as JSON objects
+for at least four different status codes
+-------------------------------------------------------------------------------------------
+
+10/04/20: tests for failures missing.
+-------------------------------------------------------------------------------------------
+CRITERIA:Demonstrate validity of API behavior:
+Includes at least one test for expected success and error behavior for each endpoint
+using the unittest library
+Includes tests demonstrating role-based access control, at least two per role.
+-------------------------------------------------------------------------------------------
+===========================================================================================
+===========================================================================================
+Third-Party Authentication:
+===========================================================================================
+CRITERIA:Configure third-party authentication systems:
+Auth0 is set up and running at the time of submission.
+All required configuration settings are included in a bash file which export:
+
+The Auth0 Domain Name
+The JWT code signing secret
+The Auth0 Client ID
+-------------------------------------------------------------------------------------------
+CRITERIA:Configure roles-based access control (RBAC):
+Roles and permission tables are configured in Auth0.
+Access of roles is limited. Includes at least two different roles with different permissions.
+The JWT includes the RBAC permission claims.
+===========================================================================================
+
+10/07/20: Need to start here.
+===========================================================================================
+Deployment:
+===========================================================================================
+CRITERIA:Application is hosted live at student provided URL:
+API is hosted live via Heroku
+URL is provided in project README
+API can be accessed by URL and requires authentication
+-------------------------------------------------------------------------------------------
+CRITERIA:Includes instructions to set up authentication:
+Instructions are provided in README for setting up authentication so reviewers can test endpoints at live application endpoint
+===========================================================================================
+===========================================================================================
+Code Quality & Documentation:
+===========================================================================================
+CRITERIA:Write clear, concise and well documented code:
+The code adheres to the PEP 8 style guide and follows common best practices, including:
+
+Variable and function names are clear.
+Endpoints are logically named.
+Code is commented appropriately.
+Secrets are stored as environment variables.
+-------------------------------------------------------------------------------------------
+CRITERIA:Project demonstrates reliability and testability:
+Application can be run with no errors and responds with the expected results.
+API test suite for endpoints and RBAC behavior runs without errors or failures
+-------------------------------------------------------------------------------------------
+CRITERIA:Project demonstrates maintainability:
+Variable names are logical, code is DRY and well-commented where code complexity makes them useful
+-------------------------------------------------------------------------------------------
+
+10/05/20: Need to add README
+CRITERIA:Project includes thorough documentation:
+Project includes an informative README
+Motivation for project
+Project dependencies, local development and hosting instructions,
+Detailed instructions for scripts to install any project dependencies, and to run the development server.
+Documentation of API behavior and RBAC controls
+===========================================================================================
+===========================================================================================
