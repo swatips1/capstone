@@ -1,30 +1,28 @@
 import os
-from flask import Flask, request, abort, jsonify, flash, current_app, redirect, url_for
+from flask import (
+    Flask, request, abort, jsonify,
+    flash, current_app, redirect, url_for
+)
 
 from models import setup_db
-# import babel
-# from flask_babel import Babel
 from flask_cors import CORS
 from flask_cors import cross_origin
 import json
 
-#Authentication
+# Authentication
 from auth.auth import AuthError, requires_auth
 
-#Import all models
+# Import all models
 from models import *
 
-#Supporting functions
+# Supporting functions
 from lib import *
 
-def create_app(test_config=None):
 
+def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
-    CORS(app) #Basic use
-
-
-    # app.jinja_env.filters['datetime'] = format_datetime
+    CORS(app)
     '''
     Use the after_request decorator to set Access-Control-Allow
     '''
@@ -33,6 +31,7 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
         response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS')
         return response
+        
 
     '''
     Routes
@@ -53,7 +52,8 @@ def create_app(test_config=None):
 
     @app.route('/')
     def hello():
-        return jsonify({'message': 'Welcome to Choremosta- World''s best chore organizer!'})
+        return jsonify(
+            {'message': 'Welcome to Choremosta-World''s best chore organiza!'})
 
     '''
     -----------------------------------------------------------
@@ -84,8 +84,8 @@ def create_app(test_config=None):
             return jsonify({'success': False,
                             'message': e})
         return jsonify({'success': True,
-                        'tasks' : tasks,
-                        'totalTasks' : len(tasks)})
+                        'tasks': tasks,
+                        'totalTasks': len(tasks)})
 
     '''
     -----------------------------------------------------------
@@ -116,8 +116,8 @@ def create_app(test_config=None):
             return jsonify({'success': False,
                             'message': e})
         return jsonify({'success': True,
-                        'people' : people,
-                        'totalPeople' : len(people)})
+                        'people': people,
+                        'totalPeople': len(people)})
 
     '''
     -----------------------------------------------------------
@@ -142,15 +142,13 @@ def create_app(test_config=None):
     @app.route('/tasks', methods=['POST'])
     @requires_auth('add_task')
     def add_task(payload):
-      # try:
-      description = request.get_json()['description']
-      task = taskLookup(description)
-      if task is not None:
-          # return jsonify({'message': 'Tasks already exists. Please correct description and try again'})
-          abort(422)
-      task = Task(description=description)
-      task.insert()
-      return redirect(url_for('tasks'))
+        description = request.get_json()['description']
+        task = taskLookup(description)
+        if task is not None:
+            abort(422)
+        task = Task(description=description)
+        task.insert()
+        return redirect(url_for('tasks'))
 
     '''
     -----------------------------------------------------------
@@ -178,15 +176,15 @@ def create_app(test_config=None):
     @app.route('/people', methods=['POST'])
     @requires_auth('add_person')
     def add_person(payload):
-      try:
-        name = request.get_json()['name']
-        ssn = request.get_json()['ssn']
-        person = Person(name=name, ssn=ssn)
-        person.insert()
-      except Exception as e:
-          print(e)
-          return jsonify({'message': e})
-      return redirect(url_for('people'))
+        try:
+            name = request.get_json()['name']
+            ssn = request.get_json()['ssn']
+            person = Person(name=name, ssn=ssn)
+            person.insert()
+        except Exception as e:
+            print(e)
+            return jsonify({'message': e})
+        return redirect(url_for('people'))
 
     '''
     -----------------------------------------------------------
@@ -222,8 +220,9 @@ def create_app(test_config=None):
             startDate = request.get_json()['startDate']
             dueBy = request.get_json()['dueBy']
             status = request.get_json()['status']
-            personTask = PersonTask(personid=personId, taskid=taskId, startdate=startDate,
-                                    dueby=dueBy, status=status)
+            personTask = PersonTask(personid=personId, taskid=taskId,
+                                    startdate=startDate, dueby=dueBy,
+                                    status=status)
             personTask.insert()
         except Exception as e:
             print(e)
@@ -263,8 +262,9 @@ def create_app(test_config=None):
         startDate = request.get_json()['startDate']
         status = request.get_json()['status']
 
-        personTask = PersonTask.query.filter(PersonTask.personid==personId, PersonTask.taskid==taskId,
-                                             PersonTask.startdate==startDate
+        personTask = PersonTask.query.filter(PersonTask.personid == personId,
+                                             PersonTask.taskid == taskId,
+                                             PersonTask.startdate == startDate
                                              ).one_or_none()
         # print(personTask)
         if personTask is None:
@@ -273,8 +273,8 @@ def create_app(test_config=None):
         personTask.update()
         tasks = get_tasks()
         return jsonify({'success': True,
-                        'tasks' : tasks,
-                        'totalTasks' : len(tasks)})
+                        'tasks': tasks,
+                        'totalTasks': len(tasks)})
 
     '''
     -----------------------------------------------------------
@@ -305,7 +305,7 @@ def create_app(test_config=None):
                             'message': e})
         return jsonify({'success': True,
                         'user': user_id,
-                        'user_tasks' : tasks})
+                        'user_tasks': tasks})
 
     '''
     -----------------------------------------------------------
@@ -333,14 +333,14 @@ def create_app(test_config=None):
             abort(404)
         try:
             task.delete()
-            tasks =get_tasks()
+            tasks = get_tasks()
         except Exception as e:
             print(e)
             return jsonify({'success': False,
-                            'message' : 'error'})
+                            'message': 'error'})
         return jsonify({'success': True,
-                        'tasks' : tasks,
-                        'totalTasks' : len(tasks)})
+                        'tasks': tasks,
+                        'totalTasks': len(tasks)})
 
     '''
     -----------------------------------------------------------
@@ -368,14 +368,14 @@ def create_app(test_config=None):
             abort(404)
         try:
             person.delete()
-            people =get_people()
+            people = get_people()
         except Exception as e:
             print(e)
             return jsonify({'success': False,
-                            'message' : 'error'})
+                            'message': 'error'})
         return jsonify({'success': True,
-                        'people' : people,
-                        'totalPeople' : len(people)})
+                        'people': people,
+                        'totalPeople': len(people)})
 
     '''
     ***********************************************************
@@ -400,19 +400,19 @@ def create_app(test_config=None):
 
     @app.errorhandler(404)
     def not_found(error):
-          return jsonify({
-                "success": False,
-                "error": 404,
-                "message": "resource not found"
-            }), 404
+        return jsonify({
+            "success": False,
+            "error": 404,
+            "message": "resource not found"
+        }), 404
 
     @app.errorhandler(400)
     def bad_request(error):
-          return jsonify({
-                "success": False,
-                "error": 400,
-                "message": "bad request"
-            }), 400
+        return jsonify({
+            "success": False,
+            "error": 400,
+            "message": "bad request"
+        }), 400
 
     @app.errorhandler(AuthError)
     def not_authorized(AuthError):
@@ -452,7 +452,7 @@ def create_app(test_config=None):
         if task is None:
             abort(404)
         return jsonify({'success': True,
-                        'id' : task.id})
+                        'id': task.id})
 
     '''
     -----------------------------------------------------------
@@ -478,13 +478,13 @@ def create_app(test_config=None):
         if person is None:
             abort(404)
         return jsonify({'success': True,
-                        'id' : person.id})
+                        'id': person.id})
 
     '''***********************************************************
     '''
 
-
     return app
+
 
 app = create_app()
 

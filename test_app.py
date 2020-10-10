@@ -2,10 +2,9 @@ import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-# from flaskr import create_app
-# from models import *
 from app import *
 from datetime import datetime, timedelta
+
 
 class ChoremostaTestCase(unittest.TestCase):
     """This class represents Choremosta test cases"""
@@ -19,7 +18,7 @@ class ChoremostaTestCase(unittest.TestCase):
 
         setup_db(self.app, self.database_path)
 
-        #Permissions setUp
+        # Permissions setUp
         self.child_user = os.getenv('child_user')
         self.parent_user = os.getenv('parent_user')
 
@@ -91,7 +90,7 @@ class ChoremostaTestCase(unittest.TestCase):
     # ------------------------------------------------------------------------------------#
     def test_add_task(self):
         """Test Add Task """
-        print('...........................Parent:Test Add Task...........................')
+        print('..................Parent:Test Add Task.................')
         res = self.client().post(
             '/tasks', json=self.new_task,
             headers=[
@@ -103,12 +102,12 @@ class ChoremostaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     # Get: Success
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     def test_list_all_tasks(self):
         """Test List All Tasks """
-        print('........................Parent:Test List All Tasks........................')
+        print('.............Parent:Test List All Tasks............')
         res = self.client().get(
                 '/tasks',
                 headers=[
@@ -119,15 +118,15 @@ class ChoremostaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     # Delete task Success
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     def test_delete_task(self):
         """Test Delete Task"""
-        print('........................Parent:Test Delete Task...........................')
+        print('................Parent:Test Delete Task..................')
 
-        #Create the task as the parent since child doesnt have the right to do so
-        #TODO : Do we want to add a admin user?
+        # Create the task as the parent since child
+        # doesnt have the right to do so
         res = self.client().post(
                 '/tasks', json=self.new_task_for_delete,
                 headers=[
@@ -148,7 +147,6 @@ class ChoremostaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         task_id = json.loads(res.data).get('id', None)
 
-
         res = self.client().delete(
                 '/tasks/' + str(task_id) + '/delete',
                 headers=[
@@ -164,13 +162,13 @@ class ChoremostaTestCase(unittest.TestCase):
     # ------------------------------------------------------------------------------------#
     def test_assign_task(self):
         """Test assign task """
-        print('...........................Parent:Test Assign Task...........................')
+        print('..................Parent:Test Assign Task....................')
         res = self.client().post(
                 '/people', json=self.new_person_for_assign,
                 headers=[
                             ('Content-Type', 'application/json'),
                             ('Authorization', f'Bearer {self.parent_user}')
-                        ],follow_redirects=True)
+                        ], follow_redirects=True)
 
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
@@ -243,13 +241,13 @@ class ChoremostaTestCase(unittest.TestCase):
     # ------------------------------------------------------------------------------------#
     def test_update_task_status(self):
         """Test update task status """
-        print('....................Parent:Test update of task status....................')
+        print('..............Parent:Test update of task status..............')
         res = self.client().post(
                 '/people', json=self.new_person_for_update,
                 headers=[
                             ('Content-Type', 'application/json'),
                             ('Authorization', f'Bearer {self.parent_user}')
-                        ],follow_redirects=True)
+                        ], follow_redirects=True)
 
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
@@ -339,19 +337,19 @@ class ChoremostaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         data = json.loads(res.data)
 
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     # Get list of all tasks for a user: Success
-    #------------------------------------------------------------------------------------#
+    #  ------------------------------------------------------------------------------------#
     def test_list_user_tasks(self):
         """Test list of all task for user """
-        print('.....................Parent:Test list tasks for user......................')
+        print('...............Parent:Test list tasks for user................')
 
         res = self.client().post(
                 '/people', json=self.new_person_for_user_list,
                 headers=[
                             ('Content-Type', 'application/json'),
                             ('Authorization', f'Bearer {self.parent_user}')
-                        ],follow_redirects=True)
+                        ], follow_redirects=True)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['totalPeople'], True)
@@ -434,28 +432,28 @@ class ChoremostaTestCase(unittest.TestCase):
     # #************************************************************************************#
     # # People:Parent
     # #************************************************************************************#
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     # Add: Success
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     def test_add_person(self):
         """Test Add Person """
-        print('..........................Parent:Test Add Person...........................')
+        print('..................Parent:Test Add Person..................')
         res = self.client().post(
                 '/people', json=self.new_person,
                 headers=[
                         ('Content-Type', 'application/json'),
                         ('Authorization', f'Bearer {self.parent_user}')
-                    ],follow_redirects=True)
+                    ], follow_redirects=True)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
-    # #------------------------------------------------------------------------------------#
-    # # Get: Success
-    # #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
+    # Get: Success
+    # ------------------------------------------------------------------------------------#
     def test_list_all_people(self):
         """Test List All People"""
-        print('.......................Parent:Test List all People..........................')
+        print('..............Parent:Test List all People.................')
         res = self.client().get(
                 '/people',
                 headers=[
@@ -466,19 +464,19 @@ class ChoremostaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     # Delete person Success
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     def test_delete_person(self):
         """Test Delete Person"""
-        print('........................Parent:Test Delete Person........................')
+        print('.............Parent:Test Delete Person...............')
 
         res = self.client().post(
                 '/people', json=self.new_person_for_delete,
                 headers=[
                             ('Content-Type', 'application/json'),
                             ('Authorization', f'Bearer {self.parent_user}')
-                        ],follow_redirects=True)
+                        ], follow_redirects=True)
 
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
@@ -500,16 +498,15 @@ class ChoremostaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(data['success'], True)
 
-
-    #************************************************************************************#
+    # ************************************************************************************#
     # Tasks:Child
-    #************************************************************************************#
-    #------------------------------------------------------------------------------------#
+    # ************************************************************************************#
+    # ------------------------------------------------------------------------------------#
     # Add: Success
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     def test_child_add_task(self):
         """Test Add Task """
-        print('...........................Child:Test Add Task...........................')
+        print('.................Child:Test Add Task................')
         res = self.client().post(
             '/tasks', json=self.new_task,
             headers=[
@@ -519,12 +516,12 @@ class ChoremostaTestCase(unittest.TestCase):
             follow_redirects=True)
         self.assertEqual(res.status_code, 401)
 
-    # #------------------------------------------------------------------------------------#
-    # # Get: Success
-    # #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
+    # Get: Success
+    # ------------------------------------------------------------------------------------#
     def test_child_list_all_tasks(self):
         """Test List All Tasks """
-        print('.........................Child:Test List All Tasks.........................')
+        print('...............Child:Test List All Tasks................')
         res = self.client().get(
                 '/tasks',
                 headers=[
@@ -536,27 +533,27 @@ class ChoremostaTestCase(unittest.TestCase):
     # #************************************************************************************#
     # # People
     # #************************************************************************************#
-    # #------------------------------------------------------------------------------------#
-    # # Add: Success
-    # #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
+    # Add: Success
+    # ------------------------------------------------------------------------------------#
     def test_child_add_person(self):
         """Test Add Person """
-        print('...........................Child:Test Add Person...........................')
+        print('...................Child:Test Add Person..................')
         res = self.client().post(
                 '/people', json=self.new_person,
                 headers=[
                         ('Content-Type', 'application/json'),
                         ('Authorization', f'Bearer {self.child_user}')
-                    ],follow_redirects=True)
+                    ], follow_redirects=True)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 401)
 
-    # #------------------------------------------------------------------------------------#
-    # # Get: Success
-    # #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
+    #  Get: Success
+    # ------------------------------------------------------------------------------------#
     def test_child_list_all_people(self):
         """Test List All People"""
-        print('.........................Child:Test List all People.........................')
+        print('.................Child:Test List all People..................')
         res = self.client().get(
                 '/people',
                 headers=[
@@ -566,13 +563,13 @@ class ChoremostaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 401)
 
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     # Delete task Success
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     def test_child_delete_task(self):
         """Test Delete Task"""
-        print('..........................Child:Test Delete Task..........................')
-        #Need to ask task to delete as parent
+        print('.................Child:Test Delete Task................')
+        # Need to ask task to delete as parent
         res = self.client().post(
                 '/tasks', json=self.new_task_for_delete,
                 headers=[
@@ -592,7 +589,7 @@ class ChoremostaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         task_id = json.loads(res.data).get('id', None)
 
-        #Attempt delete as child
+        # Attempt delete as child
         res = self.client().delete(
                 '/tasks/' + str(task_id) + '/delete',
                 headers=[
@@ -601,7 +598,7 @@ class ChoremostaTestCase(unittest.TestCase):
                         ])
         self.assertEqual(res.status_code, 401)
 
-        #Clean as parent
+        # Clean as parent
         res = self.client().delete(
                 '/tasks/' + str(task_id) + '/delete',
                 headers=[
@@ -610,19 +607,19 @@ class ChoremostaTestCase(unittest.TestCase):
                         ])
         self.assertEqual(res.status_code, 200)
 
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     # Delete person Success
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     def test_child_delete_person(self):
         """Test Delete Person"""
-        print('..........................Child:Test Delete Person........................')
-        #Need to ask task to delete as parent
+        print('.................Child:Test Delete Person.................')
+        # Need to ask task to delete as parent
         res = self.client().post(
                 '/people', json=self.new_person_for_delete,
                 headers=[
                             ('Content-Type', 'application/json'),
                             ('Authorization', f'Bearer {self.parent_user}')
-                        ],follow_redirects=True)
+                        ], follow_redirects=True)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['totalPeople'], True)
@@ -636,7 +633,7 @@ class ChoremostaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         person_id = json.loads(res.data).get('id', None)
 
-        #Attempt delete as child
+        # Attempt delete as child
         res = self.client().delete(
                 '/people/' + str(person_id) + '/delete',
                 headers=[
@@ -645,7 +642,7 @@ class ChoremostaTestCase(unittest.TestCase):
                         ])
         self.assertEqual(res.status_code, 401)
 
-        #Clean as parent
+        # Clean as parent
         res = self.client().delete(
                 '/people/' + str(person_id) + '/delete',
                 headers=[
@@ -654,13 +651,13 @@ class ChoremostaTestCase(unittest.TestCase):
                         ])
         self.assertEqual(res.status_code, 200)
 
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     # Assign Tasks: Success
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     def test_child_assign_task(self):
         """Test assign task """
-        print('.........................Child:Test Assign Task...........................')
-        #Need to ask task to delete as parent
+        print('.................Child:Test Assign Task..................')
+        # Need to ask task to delete as parent
         res = self.client().post(
                 '/people', json=self.new_person_for_assign,
                 headers=[
@@ -710,7 +707,7 @@ class ChoremostaTestCase(unittest.TestCase):
             'status': 'Pending'
             }
 
-        #Child:Attempt assignment
+        # Child:Attempt assignment
         res = self.client().post(
                 '/people/assign_task', json=self.assignment,
                 headers=[
@@ -719,7 +716,7 @@ class ChoremostaTestCase(unittest.TestCase):
                         ], follow_redirects=True)
         self.assertEqual(res.status_code, 401)
 
-        #Cleanup as parent
+        # Cleanup as parent
         res = self.client().delete(
                 '/people/' + str(person_id) + '/delete',
                 headers=[
@@ -736,18 +733,18 @@ class ChoremostaTestCase(unittest.TestCase):
                         ])
         self.assertEqual(res.status_code, 200)
 
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     # Update task status: Success
-    #------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------#
     def test_child_update_task_status(self):
         """Test update task status """
-        print('......................Child:Test update of task status.....................')
+        print('................Child:Test update of task status..............')
         res = self.client().post(
                 '/people', json=self.new_person_for_update,
                 headers=[
                             ('Content-Type', 'application/json'),
                             ('Authorization', f'Bearer {self.parent_user}')
-                        ],follow_redirects=True)
+                        ], follow_redirects=True)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['totalPeople'], True)
@@ -841,14 +838,14 @@ class ChoremostaTestCase(unittest.TestCase):
     # ------------------------------------------------------------------------------------#
     def test_child_list_user_tasks(self):
         """Test list of all task for user """
-        print('......................Child:Test list tasks for user......................')
-        #Need to ask task to delete as parent
+        print('................Child:Test list tasks for user................')
+        # Need to ask task to delete as parent
         res = self.client().post(
                 '/people', json=self.new_person_for_user_list,
                 headers=[
                             ('Content-Type', 'application/json'),
                             ('Authorization', f'Bearer {self.parent_user}')
-                        ],follow_redirects=True)
+                        ], follow_redirects=True)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['totalPeople'], True)
@@ -900,7 +897,7 @@ class ChoremostaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertTrue(data['totalTasks'], True)
 
-        #Child: Attempt getting list of tasks for user
+        # Child: Attempt getting list of tasks for user
         res = self.client().post(
                 '/people/' + str(person_id) + '/tasks',
                 headers=[
@@ -911,7 +908,7 @@ class ChoremostaTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertTrue(data['user_tasks'], True)
 
-        #Cleanup as parent
+        # Cleanup as parent
         res = self.client().delete(
                 '/people/' + str(person_id) + '/delete',
                 headers=[
