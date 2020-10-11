@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from app import *
 from datetime import datetime, timedelta
 
+db_name = 'choremosta_test'
+
 
 class ChoremostaTestCase(unittest.TestCase):
     """This class represents Choremosta test cases"""
@@ -14,8 +16,9 @@ class ChoremostaTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "choremosta_test"
-        self.database_path = "postgresql://postgres:Aspen100@localhost:5432/choremosta_test"
-
+        self.database_url = "postgres:Aspen100@localhost:5432"
+        self.database_path = "postgresql://{}/{}".format(
+            self.database_url, self.database_name)
         setup_db(self.app, self.database_path)
 
         # Permissions setUp

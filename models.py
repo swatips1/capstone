@@ -108,10 +108,16 @@ class PersonTask(db.Model):
     __tablename__ = 'persontasks'
     dt = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S")
 
-    personid = db.Column(db.Integer, db.ForeignKey('person.id', name ='fk_person_task_person'), primary_key=True, nullable=False)
-    taskid = db.Column(db.Integer, db.ForeignKey('task.id', name ='fk_person_task_task'), primary_key=True, nullable=False)
-    startdate = db.Column(db.DateTime, nullable=False, primary_key=True,  default=datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S"))
-    dueby = db.Column(db.DateTime, nullable=False, default=datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S"))
+    personid = db.Column(
+        db.Integer, db.ForeignKey('person.id', name='fk_person_task_person'),
+        primary_key=True, nullable=False)
+    taskid = db.Column(
+        db.Integer, db.ForeignKey('task.id', name='fk_person_task_task'),
+        primary_key=True, nullable=False)
+    startdate = db.Column(
+        db.DateTime, nullable=False,
+        primary_key=True, default=dt)
+    dueby = db.Column(db.DateTime, nullable=False, default=dt)
     status = Column(String, nullable=False, default='Not_Started')
 
     def __init__(self, personid, taskid, startdate, dueby, status):
