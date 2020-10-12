@@ -18,4 +18,3 @@ export ENABLE_RBAC=true
 export ADD_PERMISSIONS_TO_TOKEN=true
 
 #
-# https://spskelly.us.auth0.com/authorize?audience=choremonsta&response_type=token&client_id=PBFYXnZc3cLsQ5WNJvYmxbV7ObZIh4xc&redirect_uri=http://localhost:8100/
